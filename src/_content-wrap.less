@@ -1,10 +1,18 @@
 @import "_variables.less";
 
 #content-wrap#content-wrap {
-  #toolbar-frame,
+  @spacing-right: 34px;
+  @spacing-left: 26px;
+
+  &,
+  #toolbar-frame {
+    overflow: visible;
+  }
+
+  #toolbar,
   #headlines-frame {
-    padding-right: 34px;
-    padding-left: 26px;
+    padding-right: @spacing-right;
+    padding-left: @spacing-left;
     background-color: @default-bg;
   }
 
@@ -20,8 +28,8 @@
   }
 
   #floatingTitle {
-    margin-right: 34px;
-    margin-left: 26px;
+    margin-right: @spacing-right;
+    margin-left: @spacing-left;
     border-bottom-color: @color-fade3;
     box-shadow: none;
 
@@ -41,7 +49,8 @@
       padding-left: 5px;
     }
     .icon-anchor {
-      margin-left: 5px;
+      margin: 0 2px;
+      padding: 2px;
     }
     .updated {
       color: @faded-text;
@@ -52,15 +61,19 @@
     .header,
     .content {
       margin: 0;
-      padding: 10px 40px 10px 32px;
+      padding: 10px 40px 6px 32px;
+    }
+    .header {
+      font-size: 11px;
+    }
+    .title {
+      font-size: 13px;
+      line-height: 1.2;
     }
     .header > * {
       padding: 0;
       min-height: unset;
       align-items: unset;
-    }
-    .title {
-      font-size: inherit;
     }
   }
 
@@ -87,20 +100,24 @@
     // date
     > :nth-child(4) {
       order: 4;
-      padding: 3px 2px 1px;
       min-height: unset;
     }
     > .left {
       order: 5;
       flex-direction: row-reverse;
+      padding-left: 28px;
 
       .dijitCheckBox {
-        margin-left: 10px;
+        margin-left: 7px;
         border-color: transparent;
         background-color: @color-fade4;
-      }
-      .dijitCheckBoxChecked {
-        background-color: @color-checked;
+
+        &:hover {
+          background-color: @color-fade6;
+        }
+        &.dijitCheckBoxChecked {
+          background-color: @color-checked;
+        }
       }
     }
   }
@@ -121,16 +138,20 @@
     }
   }
 
-  .icon-score when (@feedy-hide-score-icon = true) {
-    display: none;
+  .icon-score {
+    position: absolute;
+    right: 85px;
+    opacity: 1;
   }
 
   .feed {
     display: flex;
+    flex: 0 0 130px;
+    max-width: 130px;
+    padding-right: 5px;
 
     a {
-      width: 115px;
-      margin-right: 5px;
+      max-width: 100%;
       padding: 1px 6px;
       border: 1px solid @color-fade1;
       border-radius: 99px;
@@ -138,11 +159,11 @@
       text-overflow: ellipsis;
       font-style: normal;
       color: @default-text;
-
-      &:empty {
-        display: none;
-      }
     }
+  }
+
+  #headlines-frame[is-vfeed="0"] .feed {
+    display: none;
   }
 
   .label {
@@ -155,13 +176,10 @@
     }
   }
 
-  .cdm,
+  #floatingTitle,
+  [data-article-id].cdm,
   .hl {
-    margin-bottom: -1px;
-    border: 1px solid @border-default;
-    border-right-color: transparent !important;
-    border-left-color: transparent !important;
-    background-color: transparent;
+    position: relative;
 
     .author,
     .excerpt,
@@ -170,14 +188,40 @@
     .updated {
       color: @faded-text;
     }
+    .preview {
+      padding-left: 0;
+      font-size: 11px;
+    }
     .title {
       text-decoration: none;
+      font-size: 13px;
     }
     &.Unread {
       .title {
         color: @default-text;
       }
     }
+    &:not(.marked) .marked-pic,
+    &:not(.published) .pub-pic,
+    .icon-anchor,
+    .icon-score,
+    .footer .material-icons {
+      color: @color-fade4;
+      transition: color 0.2s;
+
+      &:hover {
+        color: @color-fade6;
+      }
+    }
+  }
+
+  [data-article-id].cdm,
+  .hl {
+    margin-bottom: -1px;
+    border: 1px solid @border-default;
+    border-right-color: transparent !important;
+    border-left-color: transparent !important;
+    background-color: transparent;
   }
 
   .cdm.expandable:not(.active),
@@ -203,30 +247,34 @@
         color: @default-text;
       }
     }
-    &:not(.marked) .left .marked-pic,
-    &:not(.published) .left .pub-pic,
-    &:not(.Selected) .left .dijitCheckBox {
-      color: @color-fade4;
+    &:not(.marked) .marked-pic,
+    &:not(.published) .pub-pic,
+    &:not(.Selected) .dijitCheckBox,
+    .icon-score {
       display: none;
     }
     &:hover {
       > * {
         background-color: @color-fade1;
       }
-      .left .marked-pic,
-      .left .pub-pic,
-      .left .dijitCheckBox {
+      .marked-pic,
+      .pub-pic,
+      .dijitCheckBox,
+      .icon-score {
         display: block;
       }
       .updated {
         display: none;
       }
     }
+    &:not(:hover) {
+      .left {
+        padding-left: 2px;
+      }
+    }
   }
 
   .cdm {
-    position: relative;
-
     &.expanded {
       border-color: @border-default !important;
     }
@@ -237,12 +285,16 @@
     &.expandable.active {
       margin-bottom: 17px;
       padding: 25px;
+      background-color: transparent !important;
 
       .title {
         display: block;
         font: normal normal bold 24px/28px @fonts-heading;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
+      }
+      .icon-score {
+        right: 110px;
       }
     }
     &.expandable:not(.active) {
@@ -278,6 +330,9 @@
         }
       }
     }
+    .footer {
+      border: none;
+    }
   }
 
   #headlines-frame.wide .hl,
@@ -287,9 +342,10 @@
 
     > .feed {
       flex: 1;
+      max-width: unset;
 
       a {
-        width: auto;
+        max-width: 15vw;
       }
     }
     > .title,
@@ -333,9 +389,31 @@
     }
   }
 
+  .whiteBox {
+    font-size: 12px;
+    line-height: 1.5;
+    padding-bottom: 30px;
+  }
+
   #headlines-spacer {
-    padding: 30px 0;
+    position: relative;
+    margin: 0;
+    padding-top: 31px;
+    height: 100%;
     font-size: 12px;
     font-style: normal;
+
+    &::after {
+      content: "The End";
+      position: absolute;
+      right: -@spacing-right;
+      bottom: 0;
+      left: -@spacing-left;
+      padding: 50px;
+      font-size: 18px;
+      letter-spacing: 1px;
+      background-color: @color-fade3;
+      color: @color-fade5;
+    }
   }
 }

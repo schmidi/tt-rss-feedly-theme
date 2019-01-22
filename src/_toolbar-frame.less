@@ -18,14 +18,24 @@
       border: none;
       color: @default-text;
     }
-    #toolbar-headlines .left {
+    #toolbar-headlines .left,
+    > .material-icons {
       position: relative;
       top: -2px;
+      padding-left: 1px;
+    }
+    > .material-icons {
+      left: 4px;
+      padding-right: 4px; // same as .updates-available for each icon
     }
     #feed_title {
       font-size: 14px;
       font-weight: bold;
       color: @default-text;
+
+      > * {
+        vertical-align: middle;
+      }
     }
     #selected_prompt {
       font-style: normal;
