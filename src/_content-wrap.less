@@ -4,6 +4,8 @@
   @spacing-right: 34px;
   @spacing-left: 26px;
 
+  margin-left: -5px;
+
   &,
   #toolbar-frame {
     overflow: visible;
@@ -149,10 +151,10 @@
     display: flex;
     flex: 0 0 130px;
     max-width: 130px;
-    padding-right: 5px;
 
     a {
       max-width: 100%;
+      margin-right: 5px;
       padding: 1px 6px;
       overflow: hidden;
       border: 1px solid @color-fade1;
@@ -164,17 +166,17 @@
   }
 
   #headlines-frame[is-vfeed="0"] .feed {
-    display: none;
+    flex-basis: 0px;
+
+    a {
+      display: none;
+    }
   }
 
   .label {
     padding: 0 4px;
     border-radius: 99px;
     vertical-align: baseline;
-
-    > i {
-      display: none;
-    }
   }
 
   #floatingTitle,
